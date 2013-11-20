@@ -78,7 +78,17 @@ public class DynamicGraphActivity extends Activity {
           				for (int i=0;i<200;i++) 
           				{
           					try {
-								Thread.sleep(1000);
+								Thread.sleep(2000);
+								Log.v("i",String.valueOf(i));
+								 if (i > 30){
+	                                 line.delPoint(0);
+	                                 Point p1 = new Point(i,(int) SAService.avgRate);
+	                                 line.addNewPoints(p1);
+	                         }else{
+	                             Point p1 = new Point(i,(int) SAService.avgRate);
+
+	                                 line.addNewPoints(p1);
+	                         }
 							} catch (InterruptedException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
@@ -92,7 +102,7 @@ public class DynamicGraphActivity extends Activity {
           						e.printStackTrace();
           					}
           					Point p = MockData.getDataFromReceiver(i); // We got new data!
-          					line.addNewPoints(p); // Add it to our graph
+          					
           	        		//if(i%5==0)
           					//Toast.makeText(getApplicationContext(), "Heart Rate: " + SAService.avgRate + " min avg: " + SAService.minAvg, Toast.LENGTH_SHORT).show();
 

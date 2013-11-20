@@ -46,6 +46,9 @@ public class LineGraph {
 		view =  ChartFactory.getLineChartView(context, mDataset, mRenderer);
 		return view;
 	}
+	public void delPoint(int index){
+        dataset.remove(index);
+}
 	
 	public void addNewPoints(Point p)
 	{
