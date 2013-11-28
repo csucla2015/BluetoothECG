@@ -2,11 +2,14 @@ package your.tutorial.graph;
 
 
 
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,21 +35,43 @@ import android.widget.Toast;
 
 public class CurrentBeat extends Activity {
 	boolean clickedb=true;
-
-	public void onCreate(Bundle savedInstanceState) {
+	EditText e;
+	public void onCreate(Bundle savedInstanceState) 
+	{
 		super.onCreate(savedInstanceState);
 		Log.v("Inside","InsideServiceStarter");
 		setContentView(R.layout.currentbeat);
 	    SharedPreferences pref = CurrentBeat.this.getSharedPreferences("store", 0); // 0 - for private mode
      	String beat = pref.getString("heartrate", null);
-     	EditText e = (EditText) findViewById(R.id.editText1);
+     	e = (EditText) findViewById(R.id.editText1);
   	    final Button myButton = new Button(this);
-  	    
-  	    for(int i=0;i<10;i++)
-     		e.setText(String.valueOf(SAService.avgRate));
-     	
+  	    anotherfunction();
+	}
+	 void anotherfunction()
+	 {  
+		 new CountDownTimer(6 * 1000, 1000) {
+	            int x = 5;
+	            
+	            @Override
+	            public void onTick(long millisUntilFinished) {
+		     		e.setText(String.valueOf(SAService.avgRate));
+
+	            	Log.v("tick","tick");
+	            }
+
+	            @Override
+	            public void onFinish() 
+	            {
+	            
+		            	Log.v("gotcha","gotcha");
+			     		e.setText(String.valueOf(SAService.avgRate));
+
+	            }
+	            
+	          
+	        }.start();	  
 
 	}
-	
-	
+		
+	 
 }

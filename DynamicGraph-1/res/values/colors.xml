@@ -7,4 +7,9 @@
     <color name="blue">#80C8FE</color>
     <color name="dark_blue">#0066B3</color>
     <color name="light_blue">#BFE3FE</color>
+    <color name="textcolor_normal">#FFFFFFFF</color>
+    <color name="backcolor_normal">#FF000000</color>
+     
+    <color name="textcolor_overspeed">#FF000000</color>
+    <color name="backcolor_overspeed">#FFFF0000</color>
 </resources>

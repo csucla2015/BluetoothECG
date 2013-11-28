@@ -1,5 +1,7 @@
 package your.tutorial.graph;
 
+import java.util.Random;
+
 import org.achartengine.GraphicalView;
 
 
@@ -21,7 +23,7 @@ public class DynamicGraphActivity extends Activity {
 	private static Thread thread;
 	static final int RANGE_DIALOG_ID = 0;
 	boolean serviceOn=false;
-
+	String TAG = "test";
 	protected Dialog onCreateDialog(int id) {
         switch (id) {
         
@@ -82,10 +84,17 @@ public class DynamicGraphActivity extends Activity {
 								Log.v("i",String.valueOf(i));
 								 if (i > 30){
 	                                 line.delPoint(0);
-	                                 Point p1 = new Point(i,(int) SAService.avgRate);
+	                                 Random randomGenerator = new Random();
+	                                int ran = -5 + randomGenerator.nextInt(10);
+		                        	 Log.v("ran", String.valueOf(ran));
+
+	                                 Point p1 = new Point(i,(int) SAService.avgRate + ran);
 	                                 line.addNewPoints(p1);
 	                         }else{
-	                             Point p1 = new Point(i,(int) SAService.avgRate);
+	                        	 Random randomGenerator = new Random();
+	                                int ran = -5 + randomGenerator.nextInt(10);	                        	 
+	                                Log.v("ran", String.valueOf(ran));
+	                             Point p1 = new Point(i,(int) SAService.avgRate + ran);
 
 	                                 line.addNewPoints(p1);
 	                         }
@@ -102,12 +111,7 @@ public class DynamicGraphActivity extends Activity {
           						e.printStackTrace();
           					}
           					Point p = MockData.getDataFromReceiver(i); // We got new data!
-          					
-          	        		//if(i%5==0)
-          					//Toast.makeText(getApplicationContext(), "Heart Rate: " + SAService.avgRate + " min avg: " + SAService.minAvg, Toast.LENGTH_SHORT).show();
-
-          				//	if (i % 50 == 0)
-          					//	line.delPoints();
+          		
           					view.repaint();
           				}
           			}
@@ -138,6 +142,84 @@ public class DynamicGraphActivity extends Activity {
 		view = line.getView(this);
 		setContentView(view);
 	}
+	////Hans function
+	public void alert(int age, String gender, float height, float weight, String ethnicity, float hbm, String intensity) {
+        double wtkg = weight/2.2;
+        double htmeter = height/39.37;
+        double BMI = wtkg/(htmeter*htmeter);
+        double MHR = 0;
+        double exceedMHR = 0;
+        double modExmin = 0;
+        double modExmax = 0;
+        double vigExmin = 0;
+        double vigExmax = 0;
+        if (gender == "Male") {
+           MHR = 214 - (0.8 * age);
+           exceedMHR = MHR * 1.1;
+        }
+       else {
+          MHR = 209 - (0.9 * age);
+          if (ethnicity == "African American") //African Females
+               exceedMHR = MHR;
+           else
+               exceedMHR = MHR * 1.1;
+       }
+       if (hbm > exceedMHR)
+           Log.v(TAG,"Danger! HBM exceeds Maximum heart rate");
+       if (gender == "Female" && ethnicity == "African American")
+       {
+           modExmin = 0.36 * MHR;
+           modExmax = 0.77 * MHR;
+           vigExmin = 0.567 * MHR;
+           vigExmax = 0.935 * MHR;
+       }
+       else
+       {
+           modExmin = 0.45 * MHR;
+           modExmax = 0.77 * MHR;
+           vigExmin = 0.63 * MHR;
+           vigExmax = 0.935 * MHR;
+       }
+       
+       if (BMI <= 18.5) //underweight
+       {
+           modExmin *= 0.95;
+           modExmax *= 0.95;
+           vigExmin *= 0.95;
+           vigExmax *= 0.95;
+       }
+       else if(BMI >= 25 && BMI <= 29.9) //overweight
+       {
+           modExmin *= 1.05;
+           modExmax *= 1.05;
+           vigExmin *= 1.05;
+           vigExmax *= 1.05;
+       }
+       else if (BMI >= 30) //obese
+       {
+           modExmin *= 1.1;
+           modExmax *= 1.1;
+           vigExmin *= 1.1;
+           vigExmax *= 1.1;
+       }
+       if (intensity == "Moderate")
+       {
+           if (hbm < modExmin)
+               Log.v(TAG,"You are not getting the most of your workout");
+           if (hbm > modExmax)
+               Log.v(TAG,"Alert! Heart beat per minute is too high!");
+       }
+       else
+       {
+           if (hbm < vigExmin)
+               Log.v(TAG,"You are not getting the most of your workout");
+           if (hbm > vigExmax)
+               Log.v(TAG,"Alert! HBM is too high!");
+       }
+       
+    }
+
+	////////
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
         case 1:
