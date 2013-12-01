@@ -1,0 +1,63 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context=".MainActivity" >
+
+   
+
+    <Button
+        android:id="@+id/btStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="57dp"
+        android:text="Stop" />
+
+      <CheckBox
+        android:id="@+id/checkBox2"
+        android:layout_width="420dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+            android:checked="true"
+        android:textSize="18dp"
+        android:text="Sent email to Dr. James Bruin" />
+
+    <CheckBox
+        android:id="@+id/checkBox1"
+        android:layout_width="420dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+            android:checked="true"
+        android:textSize="18dp"
+        android:text="Sent text to Dr. James Bruin" 
+        android:layout_below="@+id/checkBox2"
+         />
+
+    <CheckBox
+        android:id="@+id/checkBox3"
+        android:layout_width="420dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+            android:checked="true"
+        android:textSize="18dp"
+        android:text="Sent email to Relative : Joe Bruin" 
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/checkBox1"
+        />
+
+    <CheckBox
+        android:id="@+id/checkBox4"
+      android:layout_width="420dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+            android:checked="true"
+        android:textSize="18dp"
+        android:text="Sent text to Relative : Joe Bruin" 
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/checkBox3"
+        />
+    
+</RelativeLayout>

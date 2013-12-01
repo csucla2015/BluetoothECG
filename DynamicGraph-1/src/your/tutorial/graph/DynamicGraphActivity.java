@@ -4,20 +4,39 @@ import java.util.Random;
 
 import org.achartengine.GraphicalView;
 
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.Menu;
 import android.widget.Toast;
 
 public class DynamicGraphActivity extends Activity {
-
+	private Button btnAlarm;
+	private Button btnStop;
+	private Uri notification; 
+	private MediaPlayer player;
+ 	private AudioManager mAudioManager;
+ 	private int originalVolume;
 	private static GraphicalView view;
 	private LineGraph line = new LineGraph();
 	private static Thread thread;
@@ -47,23 +66,32 @@ public class DynamicGraphActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.setting);
+		  notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+		     //make a player that will play the sound
+		     player = MediaPlayer.create(getApplicationContext(), notification);
+		     //get the audio system and get the original volume of the device
+		     mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+		     originalVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+
 		//Toast.makeText(getApplicationContext(), "Heart Rate: " + SAService.avgRate + " min avg: " + SAService.minAvg, Toast.LENGTH_SHORT).show();
-		
+			
+		     alert(22, "Male", (float) 1.8288, 170, "African American", 100, "Moderate") ;
+
         // Go grab the device list
-        new CountDownTimer(15 * 1000, 1000) {
+        new CountDownTimer(1 * 1000, 1000) {
             int x =0;
 
             @Override
             public void onTick(long millisUntilFinished) {
             	
-            	if(x==0)
+            	/*if(x==0)
             	{
             		startService(new Intent(getApplicationContext(), SAService.class));
                     serviceOn = true;
                     Intent serverIntent = new Intent(getApplicationContext(), DeviceListActivity.class);
                     startActivityForResult(serverIntent, 1);
                     x++;
-            	}
+            	}*/
             
          
             }
@@ -76,12 +104,24 @@ public class DynamicGraphActivity extends Activity {
         		  thread = new Thread() {
           			public void run()
           			{	
+
           				//Condition for loop needs to be changed to as long as heartbeat tab is open!
           				for (int i=0;i<200;i++) 
           				{
           					try {
+          						
 								Thread.sleep(2000);
+								if(i==5)
+          						{
+									 Intent i1 = new Intent(DynamicGraphActivity.this, MainActivity.class);
+										
+										startActivity(i1);	
+										finish();
+          						}
 								Log.v("i",String.valueOf(i));
+								 if(SAService.avgRate > 150)
+	                                 	playAlarm();
+	                                 
 								 if (i > 30){
 	                                 line.delPoint(0);
 	                                 Random randomGenerator = new Random();
@@ -89,6 +129,7 @@ public class DynamicGraphActivity extends Activity {
 		                        	 Log.v("ran", String.valueOf(ran));
 
 	                                 Point p1 = new Point(i,(int) SAService.avgRate + ran);
+	                                
 	                                 line.addNewPoints(p1);
 	                         }else{
 	                        	 Random randomGenerator = new Random();
@@ -141,7 +182,8 @@ public class DynamicGraphActivity extends Activity {
 		super.onStart();
 		view = line.getView(this);
 		setContentView(view);
-	}
+
+	}	
 	////Hans function
 	public void alert(int age, String gender, float height, float weight, String ethnicity, float hbm, String intensity) {
         double wtkg = weight/2.2;
@@ -153,7 +195,7 @@ public class DynamicGraphActivity extends Activity {
         double modExmax = 0;
         double vigExmin = 0;
         double vigExmax = 0;
-        if (gender == "Male") {
+        if (gender.equals("Male")) {
            MHR = 214 - (0.8 * age);
            exceedMHR = MHR * 1.1;
         }
@@ -202,6 +244,11 @@ public class DynamicGraphActivity extends Activity {
            vigExmin *= 1.1;
            vigExmax *= 1.1;
        }
+       Log.v("mod", String.valueOf((modExmin)));
+       Log.v("mod", String.valueOf((vigExmin)));
+       Log.v("mod", String.valueOf((exceedMHR)));
+
+       
        if (intensity == "Moderate")
        {
            if (hbm < modExmin)
@@ -271,5 +318,28 @@ public class DynamicGraphActivity extends Activity {
             break;
         }
     }
+	public void playAlarm()
+	 {
+		 //set volume to MAX
+		 mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+    	 //start the alarm
+		 player.start();
+	 }
+	 public void stopAlarm()
+	 {
+		 //set the volume to the original volume
+		 mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, originalVolume, 0);
+		 //reset the player so that it can play again when called to play
+		 player.stop();
+		 player.reset();
+		 player = MediaPlayer.create(getApplicationContext(), notification);
+	 }
+
+	/*@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}*/
 
 }

@@ -61,8 +61,8 @@ public class InputScreen extends Activity {
 		 	     String height = e6.getText().toString();
 		 	     Log.v("str2",height);
 		 	    EditText e7 = (EditText) findViewById(R.id.editText6);
-		 	     String ethnicity = e6.getText().toString();
-		 	     Log.v("str2",ethnicity);
+		 	     String weight = e6.getText().toString();
+		 	     Log.v("str2",weight);
 		 	     SharedPreferences pref1 = InputScreen.this.getSharedPreferences("store", 0); // 0 - for private mode
 	 		   	 Editor editor = pref1.edit();
 	 		     editor.putString("name", name); 
@@ -70,7 +70,7 @@ public class InputScreen extends Activity {
 	 		     editor.putString("docphone", docphone); 
 	 		     editor.putString("relphone", relative); 
 	 		     editor.putString("height", height);
-	 		     editor.putString("ethnicity", ethnicity);
+	 		     editor.putString("ethnicity", weight);
 	             
 	             String toastText = "Service is not on";
  				if (ServiceStarter.serviceOn)
@@ -79,7 +79,7 @@ public class InputScreen extends Activity {
  				}
  				editor.putString("heartrate", String.valueOf(SAService.avgRate));
  				editor.commit();
- 				Intent intent = new Intent(InputScreen.this,CurrentBeat.class);
+ 				Intent intent = new Intent(InputScreen.this,HomePage.class);
  			    		
 	     		startActivity(intent);
 	     		finish();
