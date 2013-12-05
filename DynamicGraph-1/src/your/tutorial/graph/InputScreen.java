@@ -79,7 +79,7 @@ public class InputScreen extends Activity {
  				}
  				editor.putString("heartrate", String.valueOf(SAService.avgRate));
  				editor.commit();
- 				Intent intent = new Intent(InputScreen.this,HomePage.class);
+ 				Intent intent = new Intent(InputScreen.this, StartScreen.class);
  			    		
 	     		startActivity(intent);
 	     		finish();

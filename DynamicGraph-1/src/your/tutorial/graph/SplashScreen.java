@@ -35,7 +35,7 @@ public class SplashScreen extends Activity {
                     		"/data/data/your.tutorial.graph/shared_prefs/TourPref.xml");
                     		if (f4.exists())
                     		{	
-                    			 Intent i = new Intent(SplashScreen.this, HomePage.class);
+                    			 Intent i = new Intent(SplashScreen.this, StartScreen.class);
                                  startActivity(i);
                   
                     		}
